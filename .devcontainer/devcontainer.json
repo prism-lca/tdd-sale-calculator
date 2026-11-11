@@ -1,0 +1,5 @@
+{
+  "name": "Sale Price Calculator (TDD practice)",
+  "image": "ghcr.io/prism-lca/prism-devcontainer:latest",
+  "forwardPorts": [8000]
+}
