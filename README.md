@@ -69,25 +69,25 @@ Say to your agent:
 
 ### 5. Follow along
 
-1. The agent shows you the issue, makes a branch, and writes a plan. It
-   should ask you questions first, for example "Should $16.9915 round to the
-   nearest cent, or always round down?" Answer them: these are questions about
-   how the store works, not about code. Approve the plan when it says what you
-   mean.
-2. For each rule, in order, the agent:
+1. **Agree on the rules.** The agent shows you the issue and asks questions
+   before writing anything, for example "Should $16.9915 round to the nearest
+   cent, or always round down?" or "Is a 100% discount allowed?" Answer them:
+   these are questions about how the store works, not about code. You can add
+   rules of your own too. The agent updates the issue so the list of rules
+   always matches what you decided.
+2. **Red, then green, for each rule.** In order, the agent:
    - writes the test and shows it **failing** (red), for example
      "Rule 1 failed: expected 40, got 0"
    - writes just enough of the calculation to make it **pass** (green), and
      re-runs all the tests
-3. When all three rules are green, the agent builds the page.
-4. Open the page and try it. In a codespace, ask the agent to "start a web
-   server so I can see the page".
+3. **The page.** When every rule is green, the agent builds the page and
+   starts a web server so you can open it. Try it:
    - $50 and 20% → **$40.00**
    - $19.99 and 15% → **$16.99**
    - a discount of 120 → the error message
    - a price from a real receipt of your own
-5. The agent opens a pull request with the test results and your notes on how
-   you checked it. Read it, then click **Merge pull request**.
+4. **Wrap up.** The agent asks how you checked the page, posts the final test
+   results on the issue, and closes it.
 
 ## What to watch for
 
@@ -105,6 +105,14 @@ in AGENTS.md."
 
 ## When you're done
 
-Your repo keeps a record of how it went: the plan in `plans/`, a separate
-commit for each test and each piece of code (so you can see the test came
-first), and the test results in the pull request.
+Your repo keeps a record of how it went:
+
+- **The issue** shows the rules you agreed on, and ends with a comment holding
+  the final test results.
+- **The commit history** (click **Commits** on your repo's main page) shows a
+  separate commit for each test and each piece of code, so you can see every
+  test came first.
+
+Once you're comfortable with red and green, the team's full process adds a
+written plan, a branch and a pull request. See AGENTS.md in
+[prism-practice-repo](https://github.com/prism-lca/prism-practice-repo).
