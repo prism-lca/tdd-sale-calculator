@@ -245,14 +245,14 @@ h4 { font-family: var(--font-display); font-size: 1.02rem; margin: 10px 0 0; }
   <!-- THE RULES -->
   <section>
     <h2>The rules it has to follow</h2>
-    <p>Before anything gets built, we write down what "correct" means as examples with real answers. Anyone can check these on a phone calculator. Each one will become a test.</p>
+    <p>Before anything gets built, we write down what "correct" means. These three rules are the whole specification: each is an example with a real answer, anyone can check on a phone calculator, and each one becomes a test.</p>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>#</th><th>Example</th><th>Correct answer</th><th>Why it's here</th></tr></thead>
+        <thead><tr><th>#</th><th>Example</th><th>Correct answer</th></tr></thead>
         <tbody>
-          <tr><td>1</td><td>$50 with 20% off</td><td class="num">$40.00</td><td>The basic case</td></tr>
-          <tr><td>2</td><td>$19.99 with 15% off</td><td class="num">$16.99</td><td>The raw math gives $16.9915. Prices need whole cents.</td></tr>
-          <tr><td>3</td><td>A discount of 120%</td><td class="num">An error message</td><td>A store can't pay you to take an item</td></tr>
+          <tr><td>1</td><td>$50 with 20% off</td><td class="num">$40.00</td></tr>
+          <tr><td>2</td><td>$19.99 with 15% off</td><td class="num">$16.99 (rounded to the nearest cent)</td></tr>
+          <tr><td>3</td><td>A discount over 100%, for example 120%</td><td class="num">The message "A discount can't be more than 100%"</td></tr>
         </tbody>
       </table>
     </div>
