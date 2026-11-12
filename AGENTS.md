@@ -12,50 +12,52 @@ Check who owns this repo (`gh repo view --json owner`). If the owner isn't
 teacher can't see it. You may want to delete it and make a new copy with Owner
 set to prism-lca." Then continue if they want to.
 
-## Working on an issue, test first
+## Building it, test first
 
 Work directly on `main`: this repo belongs to one person, so there are no
-branches or pull requests. Using issue #1 as the example:
+branches, issues or pull requests. The rules come from the person, who pastes
+them into the chat from the activity page
+(https://prism-lca.github.io/tdd-sale-calculator/). Don't write the rules into
+a file: the tests are the written record of them.
 
-1. **Read the issue.** Show the person the issue's title and acceptance
-   criteria, and ask whether to start.
-2. **Agree on the rules before any code.** Go through the acceptance
-   criteria with the person. Each one must be an example that can be checked
-   yes or no, with a real answer. If anything is unclear, such as how to round
-   or whether a 100% discount is allowed, ask. Don't guess, and don't write any
-   code in this step. When the person adds or changes a rule, update the
-   issue's acceptance criteria to match (`gh issue edit 1 --body-file ...`),
-   and show them the updated list. Start building only once they say the list
-   is right.
-3. **Test, then build, one rule at a time.** For each acceptance criterion,
-   in the order the issue lists them:
+1. **Get the rules.** If the person hasn't pasted the rules yet, ask them to
+   copy the message from the activity page and paste it in. Read the rules
+   back to them as a numbered list, and ask whether to start.
+2. **Agree on the rules before any code.** Go through each rule with the
+   person. Each one must be an example that can be checked yes or no, with a
+   real answer. If anything is unclear, such as how to round or whether a 100%
+   discount is allowed, ask. Don't guess, and don't write any code in this
+   step. When the person adds or changes a rule, show them the full updated
+   numbered list. Only start building when they say the list is right.
+3. **Test, then build, one rule at a time.** For each agreed rule, in order:
    - **Red.** Write one test for it. Run all the tests and show the person
      that the new one FAILS, in plain words, e.g. "Rule 1 failed: expected
      40, got 0". Say in one sentence why it fails. Commit the test, e.g.
-     `#1: test that 20% off $50 is $40.00`. Never write the code for a rule
+     `Rule 1 test: 20% off $50 is $40.00`. Never write the code for a rule
      before its test has been seen failing.
    - **Green.** Write the smallest change that makes the test pass. Run all
-     the tests, show the result, and commit, e.g. `#1: take percent off the
-     price`.
+     the tests, show the result, and commit, e.g. `Rule 1 code: take percent
+     off the price`.
    - **Tidy.** Clean up the code if needed, keeping every test passing.
 
-   Push after each commit, and start each commit message with the issue
-   number, so the history shows every test committed before its code.
+   Push after each commit, so the history shows every test committed before
+   its code.
    - **Tests are the person's agreement.** Never weaken, skip or delete a
-     test to make it pass. If a test seems wrong, stop and ask. If the person
-     agrees to change the rule, update the issue first, then the test.
+     test to make it pass. If a test seems wrong, stop and ask. Change a test
+     only if the person agrees to change its rule.
    - For each test, explain in plain English what it checks.
 4. **Build the page.** When every rule's test passes, build the page that
    uses the tested code. Start a web server so the person can open it (see
    "Running tests" below). Ask them to try each rule on the page by hand, and
    to try a price of their own. Passing tests aren't enough on their own: the
    hand check catches a test that checks the wrong thing.
-5. **Wrap up.** Post a comment on the issue (`gh issue comment 1`) with:
-   - the output of the final test run
-   - the commits, in order, showing each test came before its code
-   - how the person checked the page by hand (ask them rather than guessing)
+5. **Wrap up.** Ask the person how they checked the page by hand. Then show
+   them, in the chat:
+   - the output of a final run of all the tests
+   - the commits, in order (`git log --oneline --reverse`), pointing out that
+     each test came before its code
 
-   Then tick the acceptance criteria the person confirmed and close the issue.
+   Make sure everything is committed and pushed.
 
 ## Running tests
 

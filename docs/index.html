@@ -165,7 +165,7 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
           <li>Writes the code</li>
           <li>Runs the tests and shows you the results</li>
           <li>Explains each test in plain English</li>
-          <li>Handles git: commits each test, then the code, and keeps the issue up to date</li>
+          <li>Handles git: commits each test, then the code that makes it pass</li>
         </ul>
       </div>
     </div>
@@ -173,7 +173,7 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
 
   <section>
     <h2>The six steps</h2>
-    <p>This is the process in the repo's <code>AGENTS.md</code>. Claude Code, Codex and OpenCode all read that file, so the agent already knows it. Everything happens on <code>main</code>: no branches, plan files or pull requests.</p>
+    <p>This is the process in the repo's <code>AGENTS.md</code>. Claude Code, Codex and OpenCode all read that file, so the agent already knows it. Everything happens on <code>main</code>: no issues, branches, plan files or pull requests.</p>
     <ol class="steps">
       <li>
         <div class="num">1</div>
@@ -187,17 +187,15 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
         <div class="num">2</div>
         <div class="step-body">
           <div class="who">You</div>
-          <h3>Create the issue, with examples</h3>
-          <p>Go to <strong>Issues → New issue → Sale Price Calculator</strong> and click <strong>Create</strong>. It becomes issue #1. The rules are already filled in as examples anyone can check yes or no, with real numbers:</p>
-<div class="gherkin"><span class="kw">Scenario:</span> Simple discount
-  <span class="kw">Given</span> an item costs $50
-  <span class="kw">When</span> I take 20% off
-  <span class="kw">Then</span> the sale price is $40.00
-
-<span class="kw">Scenario:</span> Round to the cent
-  <span class="kw">Given</span> an item costs $19.99
-  <span class="kw">When</span> I take 15% off
-  <span class="kw">Then</span> the sale price is $16.99</div>
+          <h3>Give the agent the rules</h3>
+          <p>The rules are examples anyone can check yes or no, with real numbers. Copy this message and paste it to your agent:</p>
+          <div class="prompt">
+            <div class="prompt-head"><span>The rules</span><button class="copy" type="button" id="copy-rules">Copy</button></div>
+            <p style="white-space: pre-line">Let's build the Sale Price Calculator, following AGENTS.md. Here are the rules:
+1. $50 with 20% off → $40.00
+2. $19.99 with 15% off → $16.99 (rounded to the nearest cent)
+3. A discount over 100% → no price, and the message "A discount can't be more than 100%"</p>
+          </div>
         </div>
       </li>
       <li>
@@ -205,7 +203,7 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
         <div class="step-body">
           <div class="who">Agent asks · you decide</div>
           <h3>Agree on the rules</h3>
-          <p>Tell the agent: <em>"Let's work on issue #1, following AGENTS.md."</em> It shows you the rules and asks about anything unclear, for example: <em>"Should $16.9915 round to the nearest cent, or always round down?"</em> or <em>"Is a 100% discount allowed?"</em> Answer carefully, and add rules of your own if you like. The agent updates the issue so it always matches what you decided. Settling these questions before any code exists is the most useful part of the process. No code gets written until you say the list is right.</p>
+          <p>The agent reads the rules back to you and asks about anything unclear, for example: <em>"Should $16.9915 round to the nearest cent, or always round down?"</em> or <em>"Is a 100% discount allowed?"</em> Answer carefully, and add rules of your own if you like. Whenever you change a rule, the agent shows you the full updated list, so you both agree on it. Settling these questions before any code exists is the most useful part of the process. No code gets written until you say the list is right.</p>
         </div>
       </li>
       <li>
@@ -213,7 +211,7 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
         <div class="step-body">
           <div class="who">Agent · you watch</div>
           <h3>Test, then build, one rule at a time</h3>
-          <p>For each rule on the issue, the agent repeats this loop:</p>
+          <p>For each rule you agreed on, the agent repeats this loop:</p>
           <div class="loop">
             <div class="phase red"><b>1 · RED</b><span>Write one test. Run it. It fails, because the code doesn't exist yet.</span></div>
             <div class="phase green"><b>2 · GREEN</b><span>Write just enough code to pass it. Run all the tests. They pass.</span></div>
@@ -235,8 +233,8 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
         <div class="num">6</div>
         <div class="step-body">
           <div class="who">Agent · you describe your check</div>
-          <h3>Wrap up on the issue</h3>
-          <p>The agent asks how you checked the page, then posts a comment on issue #1 with the final test results, the commits in order, and your hand check. It ticks the rules you confirmed and closes the issue. The issue and the commit history are your record of how it went.</p>
+          <h3>Wrap up</h3>
+          <p>The agent asks how you checked the page, then shows you a final run of all the tests and the list of commits in order. Your repo's commit history is the record of how it went: each test was committed before its code, and each test is named after one of your rules.</p>
         </div>
       </li>
     </ol>
@@ -244,10 +242,6 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
 
   <section>
     <h2>Things you can say to the agent</h2>
-    <div class="prompt">
-      <div class="prompt-head"><span>Starting an issue</span><button class="copy" type="button" id="copy-start">Copy</button></div>
-      <p>Let's work on issue #1, following AGENTS.md.</p>
-    </div>
     <div class="prompt">
       <div class="prompt-head"><span>Understanding a test</span><button class="copy" type="button" id="copy-explain">Copy</button></div>
       <p>Explain in plain English what each test checks, and how it could still pass while the code is broken.</p>
@@ -269,7 +263,7 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
     <p>If you see any of these, say: <em>"Stop. Go back and follow the test-first steps in AGENTS.md."</em></p>
   </section>
 
-  <p class="foot">Questions about the process? Ask Calvin or Elena, or ask the agent: "Walk me through the AGENTS.md process for this issue."</p>
+  <p class="foot">Questions about the process? Ask Calvin or Elena, or ask the agent: "Walk me through the AGENTS.md process."</p>
   <p class="foot" style="border-top: none; padding-top: 0">Template repo: <a href="https://github.com/prism-lca/tdd-sale-calculator">github.com/prism-lca/tdd-sale-calculator</a></p>
 </main>
 

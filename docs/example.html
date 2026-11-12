@@ -219,7 +219,7 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
   <section>
     <h2>The process at a glance</h2>
     <ul class="flow" aria-label="Process steps">
-      <li>Rules on issue #1</li><li class="arrow">→</li>
+      <li>You paste the rules</li><li class="arrow">→</li>
       <li>Agree on the checks</li><li class="arrow">→</li>
       <li class="r">Red</li><li class="arrow">→</li>
       <li class="g">Green</li><li class="arrow">→</li>
@@ -233,14 +233,19 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
   <!-- 5. WALKTHROUGH -->
   <section>
     <div class="step-label"><span class="pill you">Step 1 · You</span><h2>Ask for it, with the rules</h2></div>
-    <p>In your copy of the template, create issue #1 from the <strong>Sale Price Calculator</strong> issue template. It already holds the three rules from the table above. Then start your agent in the codespace and say:</p>
+    <p>In your copy of the template, start your agent in the codespace. Then copy this message, which holds the three rules from the table above, and paste it to the agent:</p>
     <div class="say you">
       <span class="who-label"><span>You say</span><button class="copy" type="button" id="copy-request">Copy</button></span>
       <div id="request-text">
-        <p>Let's work on issue #1, following AGENTS.md.</p>
+        <p>Let's build the Sale Price Calculator, following AGENTS.md. Here are the rules:</p>
+        <ol>
+          <li>$50 with 20% off → $40.00</li>
+          <li>$19.99 with 15% off → $16.99 (rounded to the nearest cent)</li>
+          <li>A discount over 100% → no price, and the message "A discount can't be more than 100%"</li>
+        </ol>
       </div>
     </div>
-    <p>The repo's <code>AGENTS.md</code> tells the agent the test-first steps, so you don't have to spell them out.</p>
+    <p>The repo's <code>AGENTS.md</code> tells the agent the test-first steps, so you don't have to spell them out. The rules aren't saved in the repo: the tests the agent writes are the record of them.</p>
   </section>
 
   <section>
@@ -250,7 +255,7 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
       <span class="who-label"><span>Agent says</span></span>
       <p>I'll write three checks, one per rule. Two questions first. For rounding, should $16.9915 round to the <em>nearest</em> cent ($16.99), or always round down? And is a discount of exactly 100% (free) allowed?</p>
     </div>
-    <p class="lesson"><b>Your job:</b> answer these. They're questions about how the store works, not about code, and the agent shouldn't guess. Settling them now is the most useful step in the whole process. The agent updates the issue so the rules always match what you decided.</p>
+    <p class="lesson"><b>Your job:</b> answer these. They're questions about how the store works, not about code, and the agent shouldn't guess. Settling them now is the most useful step in the whole process. Whenever you change a rule, the agent shows you the full updated list, so you both agree on it.</p>
   </section>
 
   <section>
@@ -314,7 +319,7 @@ button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
       <li>Type 120 as the discount, and check you see the error message.</li>
       <li>Try a price from a real receipt of your own.</li>
     </ul>
-    <p class="lesson"><b>Why this still matters:</b> the tests only check the calculation. Your own check catches what they can't, such as a box that's mislabeled or a result that's hard to read. When you're done, the agent asks how you checked it, posts the final test results on issue #1, and closes it.</p>
+    <p class="lesson"><b>Why this still matters:</b> the tests only check the calculation. Your own check catches what they can't, such as a box that's mislabeled or a result that's hard to read. When you're done, the agent asks how you checked it, shows you a final run of all the tests and the commits in order.</p>
   </section>
 
   <!-- 6. SUMMARY -->
@@ -385,7 +390,8 @@ render();
 document.getElementById("copy-request").addEventListener("click", function () {
   const btn = this;
   const box = document.getElementById("request-text");
-  const text = box.querySelector("p").textContent;
+  const items = Array.from(box.querySelectorAll("li")).map((li, i) => (i + 1) + ". " + li.textContent);
+  const text = box.querySelector("p").textContent + "\n" + items.join("\n");
   const fallback = () => {
     const r = document.createRange(); r.selectNodeContents(box);
     const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
