@@ -8,10 +8,9 @@ what "correct" means, the agent proves it, and you check the result yourself.
 
 **https://prism-lca.github.io/tdd-sale-calculator/**
 
-It walks you through every step, and has the rules to copy and paste to your
-agent. There's also a
-[worked example](https://prism-lca.github.io/tdd-sale-calculator/example.html)
-with a live calculator, showing what each step looks like.
+It explains how test-first work goes, shows the finished calculator working,
+walks you through every step, and has the rules to copy and paste to your
+agent.
 
 ## The short version
 
