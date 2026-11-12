@@ -4,6 +4,11 @@ In this project you guide an AI coding agent (Claude Code, Codex or OpenCode)
 to build a small web page, **test first**. You don't write any code. You say
 what "correct" means, the agent proves it, and you check the result yourself.
 
+The same directions as web pages:
+[how it works](https://prism-lca.github.io/tdd-sale-calculator/) and a
+[worked example](https://prism-lca.github.io/tdd-sale-calculator/example.html)
+with a live calculator.
+
 ## What you're building
 
 A one-page website, `index.html`, that works out sale prices. You type in a

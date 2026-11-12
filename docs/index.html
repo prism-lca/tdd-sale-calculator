@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRISM Test-First Workflow</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single readable column; the six steps form a numbered track, with the red/green loop drawn as its centrepiece. */
+:root {
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --fg: #1b2420;
+  --muted: #5a6661;
+  --line: #d9dfdb;
+  --accent: #1f5f73;
+  --accent-soft: #e2eef1;
+  --red: #b3261e;
+  --red-soft: #fbe7e5;
+  --green: #1d7a46;
+  --green-soft: #e1f3e8;
+  --code-bg: #eef1ef;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141917; --surface: #1c2320; --fg: #e5ebe8; --muted: #9aa8a2; --line: #2e3833;
+    --accent: #7cc3d6; --accent-soft: #1d3138; --red: #f08a82; --red-soft: #3a1f1d;
+    --green: #6fcf97; --green-soft: #19322a; --code-bg: #232b28; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141917; --surface: #1c2320; --fg: #e5ebe8; --muted: #9aa8a2; --line: #2e3833;
+  --accent: #7cc3d6; --accent-soft: #1d3138; --red: #f08a82; --red-soft: #3a1f1d;
+  --green: #6fcf97; --green-soft: #19322a; --code-bg: #232b28; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16.5px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 48px 72px; display: flex; flex-direction: column; gap: 48px; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 5vw, 2.8rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.55rem; }
+h3 { font-size: 1.15rem; }
+p { margin: 0; max-width: 65ch; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 1.15rem; color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 16px; }
+header { display: flex; flex-direction: column; gap: 14px; }
+code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+code { background: var(--code-bg); padding: 1px 6px; border-radius: 4px; }
+
+/* the one-line rule */
+.rule {
+  border: 1.5px solid var(--accent); background: var(--accent-soft);
+  border-radius: 10px; padding: 18px 20px; font-size: 1.1rem;
+}
+.rule strong { color: var(--accent); }
+
+/* who does what */
+.roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.role { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.role ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; }
+
+/* steps */
+ol.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+ol.steps > li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding-bottom: 28px; position: relative; }
+ol.steps > li::before {
+  content: ""; position: absolute; left: 21px; top: 44px; bottom: 0; width: 2px; background: var(--line);
+}
+ol.steps > li:last-child::before { display: none; }
+.num {
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--font-mono); font-weight: 500; border: 2px solid var(--accent); color: var(--accent); background: var(--bg);
+}
+.step-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding-top: 8px; }
+.who { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.tag-new { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; background: var(--accent); color: var(--bg); padding: 2px 8px; border-radius: 99px; margin-left: 8px; vertical-align: 2px; }
+
+/* the red-green loop */
+.loop { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 6px; }
+.phase { border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; border: 1px solid var(--line); background: var(--surface); }
+.phase b { font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.04em; }
+.phase span { font-size: 0.92rem; color: var(--muted); }
+.phase.red { background: var(--red-soft); border-color: var(--red); }
+.phase.red b { color: var(--red); }
+.phase.green { background: var(--green-soft); border-color: var(--green); }
+.phase.green b { color: var(--green); }
+.loop-note { font-size: 0.92rem; color: var(--muted); }
+@media (max-width: 520px) { .loop { grid-template-columns: 1fr; } }
+
+/* terminal-ish sample output */
+.term { background: var(--code-bg); border-radius: 8px; padding: 12px 14px; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5; overflow-x: auto; white-space: pre; }
+.term .f { color: var(--red); font-weight: 500; }
+.term .p { color: var(--green); font-weight: 500; }
+
+/* gherkin example */
+.gherkin { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.65; overflow-x: auto; white-space: pre; }
+.kw { color: var(--accent); font-weight: 500; }
+
+/* prompts with copy */
+.prompt { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.prompt-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.prompt-head span { font-weight: 600; }
+.prompt p { font-family: var(--font-mono); font-size: 0.88rem; color: var(--fg); max-width: none; }
+button.copy {
+  font: 500 0.8rem var(--font-mono); color: var(--accent); background: transparent;
+  border: 1px solid var(--accent); border-radius: 6px; padding: 4px 10px; cursor: pointer;
+}
+button.copy:hover { background: var(--accent-soft); }
+button.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* warning signs */
+.signs { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.signs li { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; }
+.flag { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--red); border: 1px solid var(--red); border-radius: 99px; padding: 1px 8px; margin-top: 3px; white-space: nowrap; }
+
+.foot { border-top: 1px solid var(--line); padding-top: 20px; color: var(--muted); font-size: 0.92rem; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <header>
+    <div class="eyebrow">PRISM · tdd-sale-calculator · how it works</div>
+    <h1>Building with an AI agent, test first</h1>
+    <p class="lede">You don't need to write code or tests. You decide what "working" means, the agent proves it, and you check the result yourself.</p>
+    <p>New to this? Read the <a href="example.html" style="color: var(--accent)">worked example</a>, which follows an agent building a Sale Price Calculator web page from start to finish.</p>
+    <p>The project lives in the template repo <a href="https://github.com/prism-lca/tdd-sale-calculator" style="color: var(--accent)">prism-lca/tdd-sale-calculator</a>. Each student makes their own copy and works through it with an agent.</p>
+  </header>
+
+  <div class="rule">
+    <strong>The one rule:</strong> before the agent writes any code, it has to show you a test that <em>fails</em>. Then it writes the code that makes that test pass.
+  </div>
+
+  <section>
+    <h2>Why work this way</h2>
+    <p>AI agents write code fast, and they're confident even when they're wrong. A test is a small program that checks one thing the code should do, and it gives a yes-or-no answer. Watching a test fail first proves it can tell broken code from working code. When it passes afterwards, you know the code does what you asked. This is called <strong>test-driven development</strong>, or TDD.</p>
+  </section>
+
+  <section>
+    <h2>Who does what</h2>
+    <div class="roles">
+      <div class="role">
+        <h3>You</h3>
+        <ul>
+          <li>Describe what should happen, with real examples</li>
+          <li>Answer the agent's questions</li>
+          <li>Agree on the rules before any code is written</li>
+          <li>Watch for a red (failing) run before each green (passing) one</li>
+          <li>Check the finished work by hand</li>
+        </ul>
+      </div>
+      <div class="role">
+        <h3>The agent</h3>
+        <ul>
+          <li>Turns your examples into tests</li>
+          <li>Writes the code</li>
+          <li>Runs the tests and shows you the results</li>
+          <li>Explains each test in plain English</li>
+          <li>Handles git: commits each test, then the code, and keeps the issue up to date</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The six steps</h2>
+    <p>This is the process in the repo's <code>AGENTS.md</code>. Claude Code, Codex and OpenCode all read that file, so the agent already knows it. Everything happens on <code>main</code>: no branches, plan files or pull requests.</p>
+    <ol class="steps">
+      <li>
+        <div class="num">1</div>
+        <div class="step-body">
+          <div class="who">You</div>
+          <h3>Make your copy and open it</h3>
+          <p>On <a href="https://github.com/prism-lca/tdd-sale-calculator" style="color: var(--accent)">the template repo</a>, click <strong>Use this template → Create a new repository</strong>. Set Owner to <strong>prism-lca</strong> (not your own account) and name it <code>tdd-sale-calculator-&lt;your-name&gt;</code>. Then click <strong>Code → Codespaces → Create codespace on main</strong>, and start an agent in the terminal: <code>claude</code>, <code>codex</code> or <code>opencode</code>.</p>
+        </div>
+      </li>
+      <li>
+        <div class="num">2</div>
+        <div class="step-body">
+          <div class="who">You</div>
+          <h3>Create the issue, with examples</h3>
+          <p>Go to <strong>Issues → New issue → Sale Price Calculator</strong> and click <strong>Create</strong>. It becomes issue #1. The rules are already filled in as examples anyone can check yes or no, with real numbers:</p>
+<div class="gherkin"><span class="kw">Scenario:</span> Simple discount
+  <span class="kw">Given</span> an item costs $50
+  <span class="kw">When</span> I take 20% off
+  <span class="kw">Then</span> the sale price is $40.00
+
+<span class="kw">Scenario:</span> Round to the cent
+  <span class="kw">Given</span> an item costs $19.99
+  <span class="kw">When</span> I take 15% off
+  <span class="kw">Then</span> the sale price is $16.99</div>
+        </div>
+      </li>
+      <li>
+        <div class="num">3</div>
+        <div class="step-body">
+          <div class="who">Agent asks · you decide</div>
+          <h3>Agree on the rules</h3>
+          <p>Tell the agent: <em>"Let's work on issue #1, following AGENTS.md."</em> It shows you the rules and asks about anything unclear, for example: <em>"Should $16.9915 round to the nearest cent, or always round down?"</em> or <em>"Is a 100% discount allowed?"</em> Answer carefully, and add rules of your own if you like. The agent updates the issue so it always matches what you decided. Settling these questions before any code exists is the most useful part of the process. No code gets written until you say the list is right.</p>
+        </div>
+      </li>
+      <li>
+        <div class="num">4</div>
+        <div class="step-body">
+          <div class="who">Agent · you watch</div>
+          <h3>Test, then build, one rule at a time</h3>
+          <p>For each rule on the issue, the agent repeats this loop:</p>
+          <div class="loop">
+            <div class="phase red"><b>1 · RED</b><span>Write one test. Run it. It fails, because the code doesn't exist yet.</span></div>
+            <div class="phase green"><b>2 · GREEN</b><span>Write just enough code to pass it. Run all the tests. They pass.</span></div>
+            <div class="phase"><b>3 · TIDY</b><span>Clean up the code. Every test still passes.</span></div>
+          </div>
+          <p class="loop-note">What you see: first <span style="color: var(--red); font-weight: 600">red: expected 40, got 0</span>, then <span style="color: var(--green); font-weight: 600">green: $40.00 matches</span>.</p>
+          <p>The agent commits and pushes the test before the code that makes it pass, so the commit history shows every test came first. It explains each test in plain English. It's never allowed to weaken or delete a test to make it pass. If a test looks wrong, it has to stop and ask you.</p>
+        </div>
+      </li>
+      <li>
+        <div class="num">5</div>
+        <div class="step-body">
+          <div class="who">Agent builds · you check</div>
+          <h3>Build the page and check it by hand</h3>
+          <p>When every rule is green, the agent builds the page and starts a web server so you can open it. Enter $50 with 20% off and confirm you get $40.00, try the other rules, then try a price from a real receipt of your own. Tests can pass while checking the wrong thing, and this check catches that.</p>
+        </div>
+      </li>
+      <li>
+        <div class="num">6</div>
+        <div class="step-body">
+          <div class="who">Agent · you describe your check</div>
+          <h3>Wrap up on the issue</h3>
+          <p>The agent asks how you checked the page, then posts a comment on issue #1 with the final test results, the commits in order, and your hand check. It ticks the rules you confirmed and closes the issue. The issue and the commit history are your record of how it went.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Things you can say to the agent</h2>
+    <div class="prompt">
+      <div class="prompt-head"><span>Starting an issue</span><button class="copy" type="button" id="copy-start">Copy</button></div>
+      <p>Let's work on issue #1, following AGENTS.md.</p>
+    </div>
+    <div class="prompt">
+      <div class="prompt-head"><span>Understanding a test</span><button class="copy" type="button" id="copy-explain">Copy</button></div>
+      <p>Explain in plain English what each test checks, and how it could still pass while the code is broken.</p>
+    </div>
+    <div class="prompt">
+      <div class="prompt-head"><span>Checking the history</span><button class="copy" type="button" id="copy-history">Copy</button></div>
+      <p>Show me the commits so far, in order, and point out where each test came before its code.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Signs the agent skipped a step</h2>
+    <ul class="signs">
+      <li><span class="flag">Stop</span><span>It wrote code before you saw a red (failing) test run.</span></li>
+      <li><span class="flag">Stop</span><span>It changed or deleted a test to make it pass, without asking you.</span></li>
+      <li><span class="flag">Stop</span><span>It says "all tests pass" but didn't show you the output.</span></li>
+      <li><span class="flag">Stop</span><span>It built things none of your examples asked for.</span></li>
+    </ul>
+    <p>If you see any of these, say: <em>"Stop. Go back and follow the test-first steps in AGENTS.md."</em></p>
+  </section>
+
+  <p class="foot">Questions about the process? Ask Calvin or Elena, or ask the agent: "Walk me through the AGENTS.md process for this issue."</p>
+  <p class="foot" style="border-top: none; padding-top: 0">Template repo: <a href="https://github.com/prism-lca/tdd-sale-calculator">github.com/prism-lca/tdd-sale-calculator</a></p>
+</main>
+
+<script>
+document.querySelectorAll("button.copy").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var text = btn.closest(".prompt").querySelector("p");
+    var done = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy"; }, 1500); };
+    var fallback = function () {
+      var r = document.createRange(); r.selectNodeContents(text);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = "Selected";
+    };
+    try {
+      navigator.clipboard.writeText(text.textContent).then(done, fallback);
+    } catch (e) { fallback(); }
+  });
+});
+</script>
+
+</body>
+</html>
