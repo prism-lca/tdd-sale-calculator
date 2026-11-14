@@ -29,9 +29,10 @@ agent.
 
 ## When you're done
 
-Your repo's commit history (click **Commits** on your repo's main page) shows
-a separate commit for each test and each piece of code, so you can see every
-test came first. The tests in `sale.test.js` are named after your rules.
+The agent runs all the tests one last time and shows you the results, then
+saves (commits) your work and pushes it to your repo. The tests in
+`sale.test.js` are named after your rules, so they're the written record of
+what you agreed.
 
 Once you're comfortable with red and green, the team's full process adds an
 issue, a written plan, a branch and a pull request. See AGENTS.md in

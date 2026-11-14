@@ -32,16 +32,14 @@ a file: the tests are the written record of them.
 3. **Test, then build, one rule at a time.** For each agreed rule, in order:
    - **Red.** Write one test for it. Run all the tests and show the person
      that the new one FAILS, in plain words, e.g. "Rule 1 failed: expected
-     40, got 0". Say in one sentence why it fails. Commit the test, e.g.
-     `Rule 1 test: 20% off $50 is $40.00`. Never write the code for a rule
-     before its test has been seen failing.
+     40, got 0". Say in one sentence why it fails. Never write the code for
+     a rule before its test has been seen failing.
    - **Green.** Write the smallest change that makes the test pass. Run all
-     the tests, show the result, and commit, e.g. `Rule 1 code: take percent
-     off the price`.
+     the tests and show the result.
    - **Tidy.** Clean up the code if needed, keeping every test passing.
 
-   Push after each commit, so the history shows every test committed before
-   its code.
+   Don't commit or push after each test or each piece of code. You'll commit
+   and push once, at the end (see step 5).
    - **Tests are the person's agreement.** Never weaken, skip or delete a
      test to make it pass. If a test seems wrong, stop and ask. Change a test
      only if the person agrees to change its rule.
@@ -52,12 +50,9 @@ a file: the tests are the written record of them.
    to try a price of their own. Passing tests aren't enough on their own: the
    hand check catches a test that checks the wrong thing.
 5. **Wrap up.** Ask the person how they checked the page by hand. Then show
-   them, in the chat:
-   - the output of a final run of all the tests
-   - the commits, in order (`git log --oneline --reverse`), pointing out that
-     each test came before its code
+   them, in the chat, the output of a final run of all the tests.
 
-   Make sure everything is committed and pushed.
+   Then commit everything and push it.
 
 ## Running tests
 

@@ -290,7 +290,7 @@ h4 { font-family: var(--font-display); font-size: 1.02rem; margin: 10px 0 0; }
           <li>Turns your rules into tests, and explains each one</li>
           <li>Writes the code</li>
           <li>Runs the tests and shows you the results</li>
-          <li>Commits each test, then the code that makes it pass</li>
+          <li>Saves (commits) and pushes your work once, at the end</li>
         </ul>
       </div>
     </div>
@@ -403,7 +403,7 @@ h4 { font-family: var(--font-display); font-size: 1.02rem; margin: 10px 0 0; }
           </div>
           <p class="lesson"><b>What this means:</b> before the fix, 120% off $50 came out as a price of <strong>−$10.00</strong>. Every run re-checks the earlier rules too, so this fix didn't break rules 1 or 2.</p>
 
-          <p>The agent commits each test before the code that makes it pass, so your repo's history shows every test came first. It's never allowed to weaken or delete a test to make it pass. If a test looks wrong, it has to stop and ask you.</p>
+          <p>You watch every test fail before its code is written, so you can see each test came first. The agent is never allowed to weaken or delete a test to make it pass. If a test looks wrong, it has to stop and ask you.</p>
         </div>
       </li>
       <li>
@@ -426,7 +426,7 @@ h4 { font-family: var(--font-display); font-size: 1.02rem; margin: 10px 0 0; }
         <div class="step-body">
           <div class="who">Agent · you describe your check</div>
           <h3>Wrap up</h3>
-          <p>The agent asks how you checked the page, then shows you a final run of all the tests and the list of commits in order. Your repo's commit history (click <strong>Commits</strong> on your repo's main page) is the record of how it went: each test committed before its code, and each test named after one of your rules.</p>
+          <p>The agent asks how you checked the page, then shows you a final run of all the tests. Then it saves (commits) everything and pushes it to your repo. The tests in <code>sale.test.js</code> are the record of what you agreed: each one is named after one of your rules.</p>
         </div>
       </li>
     </ol>
@@ -439,8 +439,8 @@ h4 { font-family: var(--font-display); font-size: 1.02rem; margin: 10px 0 0; }
       <p>Explain in plain English what each test checks, and how it could still pass while the code is broken.</p>
     </div>
     <div class="prompt">
-      <div class="prompt-head"><span>Checking the history</span><button class="copy" type="button">Copy</button></div>
-      <p>Show me the commits so far, in order, and point out where each test came before its code.</p>
+      <div class="prompt-head"><span>Checking the tests</span><button class="copy" type="button">Copy</button></div>
+      <p>Run all the tests again and show me, in plain English, which rules pass and which fail.</p>
     </div>
   </section>
 
