@@ -38,6 +38,11 @@ a file: the tests are the written record of them.
      the tests and show the result.
    - **Tidy.** Clean up the code if needed, keeping every test passing.
 
+   **Stop and ask after every test run.** After you show a failing run (red),
+   ask the person whether to go ahead and write the code. After you show a
+   passing run (green), ask whether to go on to the next rule. Wait for their
+   answer each time; don't run ahead to the next step on your own.
+
    Don't commit or push after each test or each piece of code. You'll commit
    and push once, at the end (see step 5).
    - **Tests are the person's agreement.** Never weaken, skip or delete a
