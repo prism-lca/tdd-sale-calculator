@@ -43,8 +43,8 @@ a file: the tests are the written record of them.
    passing run (green), ask whether to go on to the next rule. Wait for their
    answer each time; don't run ahead to the next step on your own.
 
-   Don't commit or push after each test or each piece of code. You'll commit
-   and push once, at the end (see step 5).
+   Don't commit after each test or each piece of code. You'll commit once,
+   at the end (see step 5). Never push on your own.
    - **Tests are the person's agreement.** Never weaken, skip or delete a
      test to make it pass. If a test seems wrong, stop and ask. Change a test
      only if the person agrees to change its rule.
@@ -57,7 +57,8 @@ a file: the tests are the written record of them.
 5. **Wrap up.** Ask the person how they checked the page by hand. Then show
    them, in the chat, the output of a final run of all the tests.
 
-   Then commit everything and push it.
+   Then commit everything. Don't push unless the person asks you to; when
+   they do, push to `main`.
 
 ## Running tests
 
